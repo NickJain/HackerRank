@@ -6,73 +6,60 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.regex.*;
 
-class Result {
+public class Solution {
 
-    public static int getTotalX(List<Integer> a, List<Integer> b) {
-        int min = Collections.max(a);
-        int max = Collections.min(b);
-        int res=0;
-        for(int i=min; i<=max; i++){
-            int n=0;
-            for(int j=0; j<a.size(); j++){
-                if(i%a.get(j)!=0){
-                    break;
-                }
-                else{
-                    n++;
-                    if(n==a.size()){
-                        int count=0;
-                        for(int k=0; k<b.size(); k++){
-                            if(b.get(k)%i==0){
-                                count++;
-                            }
-                        }
-                        if(count==b.size()){
-                            res=res+1;
-                        }
-                    }
-                }
+    // Complete the breakingRecords function below.
+    static int[] breakingRecords(int[] scores) {
+        int max=scores[0];
+        int min=scores[0];
+        int maxCount=0;
+        int minCount=0;
+        for(int i=1; i<scores.length; i++){
+            if(max<scores[i]){
+                max = scores[i];
+                maxCount++;
+            }
+            else if(min>scores[i]){
+                min = scores[i];
+                minCount++;
             }
         }
-        return res;
+        int[] arr = new int[]{maxCount, minCount};
+        return arr;
     }
-}
 
-public class Solution {
+    private static final Scanner scanner = new Scanner(System.in);
+
     public static void main(String[] args) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
 
-        String[] firstMultipleInput = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
+        int n = scanner.nextInt();
+        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
 
-        int n = Integer.parseInt(firstMultipleInput[0]);
+        int[] scores = new int[n];
 
-        int m = Integer.parseInt(firstMultipleInput[1]);
-
-        String[] arrTemp = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
-
-        List<Integer> arr = new ArrayList<>();
+        String[] scoresItems = scanner.nextLine().split(" ");
+        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
 
         for (int i = 0; i < n; i++) {
-            int arrItem = Integer.parseInt(arrTemp[i]);
-            arr.add(arrItem);
+            int scoresItem = Integer.parseInt(scoresItems[i]);
+            scores[i] = scoresItem;
         }
 
-        String[] brrTemp = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
+        int[] result = breakingRecords(scores);
 
-        List<Integer> brr = new ArrayList<>();
+        for (int i = 0; i < result.length; i++) {
+            bufferedWriter.write(String.valueOf(result[i]));
 
-        for (int i = 0; i < m; i++) {
-            int brrItem = Integer.parseInt(brrTemp[i]);
-            brr.add(brrItem);
+            if (i != result.length - 1) {
+                bufferedWriter.write(" ");
+            }
         }
 
-        int total = Result.getTotalX(arr, brr);
-
-        bufferedWriter.write(String.valueOf(total));
         bufferedWriter.newLine();
 
-        bufferedReader.close();
         bufferedWriter.close();
+
+        scanner.close();
     }
 }
